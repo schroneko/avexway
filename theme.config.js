@@ -19,7 +19,7 @@ export default {
   prevLinks: true,
   nextLinks: true,
   footer: true,
-  footerEditLink: '',
+  footerEditLink: 'Edit this page on GitHub',
   footerText: <></>,
   unstable_faviconGlyph: '',
 }
