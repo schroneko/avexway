@@ -1,4 +1,7 @@
 export default {
+  github: 'https://github.com/schroneko/avexway',
+  docsRepositoryBase: 'https://github.com/schroneko/avexway/blob/main',
+  titleSuffix: '',
   logo: (
     <>
       <span className="mr-2 font-extrabold hidden md:inline">Avex Way</span>
@@ -12,4 +15,11 @@ export default {
       <meta httpEquiv="Content-Language" content="en" />
     </>
   ),
+  search: true,
+  prevLinks: true,
+  nextLinks: true,
+  footer: true,
+  footerEditLink: '',
+  footerText: <></>,
+  unstable_faviconGlyph: '',
 }
