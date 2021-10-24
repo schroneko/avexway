@@ -1,10 +1,10 @@
 export default {
   github: 'https://github.com/schroneko/avexway',
   docsRepositoryBase: 'https://github.com/schroneko/avexway/blob/main',
-  titleSuffix: ' - Avex Way',
+  titleSuffix: ' - avex way',
   logo: (
     <>
-      <span className="mr-2 font-extrabold hidden md:inline">Avex Way</span>
+      <span className="mr-2 font-extrabold hidden md:inline">avex way</span>
     </>
   ),
   head: (
