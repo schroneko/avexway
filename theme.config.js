@@ -18,7 +18,7 @@ export default {
   search: true,
   prevLinks: true,
   nextLinks: true,
-  footer: true,
+  footer: false,
   footerEditLink: '',
   footerText: <></>,
   unstable_faviconGlyph: '',
