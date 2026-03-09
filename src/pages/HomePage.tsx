@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
+import { useKeyboardNav } from "../hooks/useKeyboardNav";
 import { chapters, loadIntroContent, siteTitle, stripLeadingHeading } from "../lib/chapters";
 
 function formatChapterNumber(id: string) {
@@ -10,6 +11,12 @@ function formatChapterNumber(id: string) {
 export function HomePage() {
   const [intro, setIntro] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { indicator } = useKeyboardNav({
+    nextPath: chapters[0] ? `/${chapters[0].id}` : null,
+    previousPath: null,
+    nextIndicator: chapters[0]?.id ?? null,
+    previousIndicator: null,
+  });
 
   useEffect(() => {
     document.title = siteTitle;
@@ -43,6 +50,7 @@ export function HomePage() {
   return (
     <main className="page page-home">
       <header className="page-header">
+        <p className="chapter-label">第0章</p>
         <h1 className="page-title">{siteTitle}</h1>
       </header>
 
@@ -70,6 +78,22 @@ export function HomePage() {
           ))}
         </ol>
       </section>
+
+      {chapters[0] ? (
+        <Link
+          aria-label={`次の章へ: ${chapters[0].title}`}
+          className="edge-nav-hint edge-nav-hint-right"
+          to={`/${chapters[0].id}`}
+        >
+          →
+        </Link>
+      ) : null}
+
+      {indicator ? (
+        <div aria-live="polite" className="keyboard-indicator" role="status">
+          第{formatChapterNumber(indicator)}章
+        </div>
+      ) : null}
     </main>
   );
 }

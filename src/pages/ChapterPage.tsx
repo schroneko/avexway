@@ -14,9 +14,13 @@ export function ChapterPage() {
   const chapter = chapterIndex >= 0 ? chapters[chapterIndex] : null;
   const previousChapter = chapterIndex > 0 ? chapters[chapterIndex - 1] : null;
   const nextChapter = chapterIndex >= 0 && chapterIndex < chapters.length - 1 ? chapters[chapterIndex + 1] : null;
+  const previousPath = chapterIndex === 0 ? "/" : previousChapter ? `/${previousChapter.id}` : null;
+  const previousIndicator = chapterIndex === 0 ? "0" : previousChapter?.id ?? null;
   const { indicator } = useKeyboardNav({
-    nextChapterId: nextChapter?.id ?? null,
-    previousChapterId: previousChapter?.id ?? null,
+    nextPath: nextChapter ? `/${nextChapter.id}` : null,
+    previousPath,
+    nextIndicator: nextChapter?.id ?? null,
+    previousIndicator,
   });
 
   const [content, setContent] = useState('');
@@ -97,19 +101,42 @@ export function ChapterPage() {
         </article>
       ) : null}
 
-      {previousChapter || nextChapter ? (
-        <nav aria-label="章送り" className="chapter-nav">
-          {previousChapter ? (
-            <Link className="chapter-nav-link" to={`/${previousChapter.id}`}>
-              ← {previousChapter.title}
-            </Link>
-          ) : null}
-          {nextChapter ? (
-            <Link className="chapter-nav-link chapter-nav-link-next" to={`/${nextChapter.id}`}>
-              {nextChapter.title} →
-            </Link>
-          ) : null}
-        </nav>
+      {previousPath ? (
+        <Link
+          aria-label={chapterIndex === 0 ? "第0章へ戻る" : `前の章へ: ${previousChapter?.title}`}
+          className="edge-nav-hint edge-nav-hint-left"
+          to={previousPath}
+        >
+          ←
+        </Link>
+      ) : null}
+      {nextChapter ? (
+        <Link
+          aria-label={`次の章へ: ${nextChapter.title}`}
+          className="edge-nav-hint edge-nav-hint-right"
+          to={`/${nextChapter.id}`}
+        >
+          →
+        </Link>
+      ) : null}
+
+      {previousPath || nextChapter ? (
+        <>
+          <nav aria-label="章送り" className="chapter-nav">
+            {previousPath ? (
+              <Link className="chapter-nav-link" to={previousPath}>
+                <span className="chapter-nav-meta">{chapterIndex === 0 ? "← 第0章" : "← 前の章"}</span>
+                <span className="chapter-nav-title">{chapterIndex === 0 ? siteTitle : previousChapter?.title}</span>
+              </Link>
+            ) : null}
+            {nextChapter ? (
+              <Link className="chapter-nav-link chapter-nav-link-next" to={`/${nextChapter.id}`}>
+                <span className="chapter-nav-meta">次の章 →</span>
+                <span className="chapter-nav-title">{nextChapter.title}</span>
+              </Link>
+            ) : null}
+          </nav>
+        </>
       ) : null}
 
       {indicator ? (

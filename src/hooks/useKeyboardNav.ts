@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 type KeyboardNavOptions = {
-  nextChapterId?: string | null;
-  previousChapterId?: string | null;
+  nextPath?: string | null;
+  previousPath?: string | null;
+  nextIndicator?: string | null;
+  previousIndicator?: string | null;
 };
 
 const indicatorStorageKey = 'keyboard-nav-indicator';
@@ -18,7 +20,12 @@ function isTypingTarget(element: Element | null) {
   return element.isContentEditable || tagName === 'input' || tagName === 'textarea' || tagName === 'select';
 }
 
-export function useKeyboardNav({ nextChapterId, previousChapterId }: KeyboardNavOptions) {
+export function useKeyboardNav({
+  nextPath,
+  previousPath,
+  nextIndicator,
+  previousIndicator,
+}: KeyboardNavOptions) {
   const location = useLocation();
   const navigate = useNavigate();
   const [indicator, setIndicator] = useState<string | null>(null);
@@ -54,16 +61,20 @@ export function useKeyboardNav({ nextChapterId, previousChapterId }: KeyboardNav
 
       const key = event.key.toLowerCase();
 
-      if ((event.key === 'ArrowRight' || key === 'l') && nextChapterId) {
+      if ((event.key === 'ArrowRight' || key === 'l') && nextPath) {
         event.preventDefault();
-        window.sessionStorage.setItem(indicatorStorageKey, nextChapterId);
-        navigate(`/${nextChapterId}`);
+        if (nextIndicator) {
+          window.sessionStorage.setItem(indicatorStorageKey, nextIndicator);
+        }
+        navigate(nextPath);
       }
 
-      if ((event.key === 'ArrowLeft' || key === 'h') && previousChapterId) {
+      if ((event.key === 'ArrowLeft' || key === 'h') && previousPath) {
         event.preventDefault();
-        window.sessionStorage.setItem(indicatorStorageKey, previousChapterId);
-        navigate(`/${previousChapterId}`);
+        if (previousIndicator) {
+          window.sessionStorage.setItem(indicatorStorageKey, previousIndicator);
+        }
+        navigate(previousPath);
       }
     };
 
@@ -72,7 +83,7 @@ export function useKeyboardNav({ nextChapterId, previousChapterId }: KeyboardNav
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [navigate, nextChapterId, previousChapterId]);
+  }, [navigate, nextIndicator, nextPath, previousIndicator, previousPath]);
 
   return { indicator };
 }

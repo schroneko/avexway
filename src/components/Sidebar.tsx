@@ -15,7 +15,7 @@ function formatChapterNumber(id: string) {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const location = useLocation();
   const listRef = useRef<HTMLOListElement>(null);
-  const activeChapterId = chapters.find((chapter) => location.pathname === `/${chapter.id}`)?.id ?? null;
+  const activeChapterId = location.pathname === "/" ? "0000" : chapters.find((chapter) => location.pathname === `/${chapter.id}`)?.id ?? null;
 
   useEffect(() => {
     if (!activeChapterId) {
@@ -39,6 +39,18 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       </div>
       <nav className="sidebar-nav">
         <ol className="sidebar-chapter-list" ref={listRef}>
+          <li>
+            <NavLink
+              className={({ isActive }) => `sidebar-link${isActive ? ' is-active' : ''}`}
+              data-chapter-id="0000"
+              end
+              onClick={onClose}
+              to="/"
+            >
+              <span className="sidebar-link-index">0</span>
+              <span className="sidebar-link-title">{siteTitle}</span>
+            </NavLink>
+          </li>
           {chapters.map((chapter) => (
             <li key={chapter.id}>
               <NavLink
