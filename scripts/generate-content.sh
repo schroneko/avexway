@@ -58,7 +58,7 @@ echo "[3/5] Stripping page number artifacts..."
 sed -i '' -E '/^[0-9$¥£=¾#■◎]{0,3}[0-9]{1,4}[%:)=-]{0,3}$/d' "$REPLACED"
 
 echo "[4/5] Processing and splitting into chapters..."
-npx tsx "$SCRIPT_DIR/process-text.ts" "$REPLACED" "$CONTENT_DIR/meta.json" "$CONTENT_DIR"
+node --experimental-strip-types "$SCRIPT_DIR/process-text.ts" "$REPLACED" "$CONTENT_DIR/meta.json" "$CONTENT_DIR"
 
 echo "[5/5] Done."
 echo "Generated $(ls "$CONTENT_DIR"/*.mdx 2>/dev/null | wc -l | tr -d ' ') .mdx files in $CONTENT_DIR"
