@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npx wrangler@4.70.0 deploy"
+    "deploy": "npx wrangler@4.70.0 deploy",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv",
+    "lint:fix": "oxlint --fix . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv"
   },
   "dependencies": {
     "react": "latest",
@@ -20,10 +24,12 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
     "typescript": "latest",
     "vite": "latest"
   },
   "engines": {
-    "node": ">=22"
+    "node": "^24.0.0"
   }
 }
