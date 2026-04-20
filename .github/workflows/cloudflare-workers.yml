@@ -61,8 +61,8 @@ jobs:
           RAW_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           api_token="${RAW_CLOUDFLARE_API_TOKEN#Bearer }"
-          api_token="$(printf '%s' "$api_token" | tr -d '\r\n')"
-          account_id="$(printf '%s' "$RAW_CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n')"
+          api_token="$(printf '%s' "$api_token" | tr -d '\r\n' | sed -e 's/^"//' -e 's/"$//')"
+          account_id="$(printf '%s' "$RAW_CLOUDFLARE_ACCOUNT_ID" | tr -d '\r\n' | grep -Eo '[[:xdigit:]]{32}' | head -n 1 || true)"
 
           if [ -z "$api_token" ]; then
             echo "Cloudflare API token is empty after normalization." >&2
