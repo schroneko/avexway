@@ -84,10 +84,11 @@ jobs:
 
           if [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
             response_code="$(
-              curl --globoff -sS -o /tmp/cloudflare-account-check.json -w '%{http_code}' \
+              {
+                curl --globoff -sS -o /tmp/cloudflare-account-check.json -w '%{http_code}' \
                 -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
                 "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain"
-              || true
+              } || true
             )"
 
             if [ "$response_code" = "200" ]; then
