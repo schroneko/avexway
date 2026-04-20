@@ -84,9 +84,10 @@ jobs:
 
           if [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
             response_code="$(
-              curl -sS -o /tmp/cloudflare-account-check.json -w '%{http_code}' \
+              curl --globoff -sS -o /tmp/cloudflare-account-check.json -w '%{http_code}' \
                 -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
                 "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain"
+              || true
             )"
 
             if [ "$response_code" = "200" ]; then
@@ -96,7 +97,7 @@ jobs:
 
           if [ -z "$resolved_account_id" ]; then
             zone_json="$(
-              curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              curl --globoff -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
                 "https://api.cloudflare.com/client/v4/zones?name=yutahayashi.com"
             )"
             resolved_account_id="$(printf '%s' "$zone_json" | jq -r '.result[0].account.id // empty')"
