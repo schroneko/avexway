@@ -54,8 +54,37 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to Cloudflare Workers
+      - name: Resolve Cloudflare account
+        id: cloudflare-account
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          account_json="$(npx wrangler@4.70.0 whoami --json)"
+          resolved_account_id="$(
+            printf '%s' "$account_json" | jq -r --arg preferred "$CLOUDFLARE_ACCOUNT_ID" '
+              (.accounts // []) as $accounts
+              | if ($preferred | length) > 0 and any($accounts[]?; .id == $preferred) then
+                  $preferred
+                elif ($accounts | length) == 1 then
+                  $accounts[0].id
+                else
+                  empty
+                end
+            '
+          )"
+
+          if [ -z "$resolved_account_id" ] || [ "$resolved_account_id" = "null" ]; then
+            echo "Unable to resolve a unique Cloudflare account ID from the provided token." >&2
+            printf '%s' "$account_json" | jq '{accounts: [.accounts[]? | .name]}' >&2
+            exit 1
+          fi
+
+          echo "::add-mask::$resolved_account_id"
+          echo "account_id=$resolved_account_id" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ steps.cloudflare-account.outputs.account_id }}
         run: npx wrangler@4.70.0 deploy
