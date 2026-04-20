@@ -1,6 +1,6 @@
 :root {
-  --font-body: 'Noto Serif JP', serif;
-  --font-ui: 'Zen Kaku Gothic New', sans-serif;
+  --font-body: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-ui: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
   --bg: #f5f0e8;
   --bg-sidebar: #eee9df;
   --text: #1c1c1c;
@@ -22,9 +22,10 @@
   --space-48: 48px;
   --space-64: 64px;
   --space-96: 96px;
+  color-scheme: light;
 }
 
-:root[data-theme='dark'] {
+:root[data-theme="dark"] {
   --bg: #1a1916;
   --bg-sidebar: #15140f;
   --text: #c8c3b8;
@@ -34,6 +35,7 @@
   --border: #2e2b25;
   --overlay: rgba(0, 0, 0, 0.5);
   --texture-opacity: 0.015;
+  color-scheme: dark;
 }
 
 * {
@@ -61,7 +63,7 @@ body {
 }
 
 body::after {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;

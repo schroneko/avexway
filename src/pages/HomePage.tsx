@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
+import { MarkdownContent } from "../components/MarkdownContent";
 import { useKeyboardNav } from "../hooks/useKeyboardNav";
 import { chapters, loadIntroContent, siteTitle, stripLeadingHeading } from "../lib/chapters";
 
@@ -56,9 +56,9 @@ export function HomePage() {
 
       {error ? <p className="status-message">{error}</p> : null}
       {!error && intro ? (
-        <div className="prose" key={intro}>
-          <ReactMarkdown>{intro}</ReactMarkdown>
-        </div>
+        <MarkdownContent className="prose" key={intro}>
+          {intro}
+        </MarkdownContent>
       ) : null}
 
       <hr />

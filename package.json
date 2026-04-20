@@ -14,20 +14,20 @@
     "lint:fix": "oxlint --fix . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv"
   },
   "dependencies": {
-    "react": "latest",
-    "react-dom": "latest",
-    "react-markdown": "latest",
-    "react-router-dom": "latest"
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-markdown": "10.1.0",
+    "react-router-dom": "7.13.2"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "@vitejs/plugin-react": "latest",
+    "@types/node": "25.5.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.1",
     "oxfmt": "^0.42.0",
     "oxlint": "^1.57.0",
-    "typescript": "latest",
-    "vite": "latest"
+    "typescript": "6.0.2",
+    "vite": "8.0.9"
   },
   "engines": {
     "node": "^24.0.0"

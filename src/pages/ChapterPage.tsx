@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Link, useParams } from 'react-router-dom';
-import { useKeyboardNav } from '../hooks/useKeyboardNav';
-import { chapters, loadChapterContent, siteTitle, stripLeadingHeading } from '../lib/chapters';
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { MarkdownContent } from "../components/MarkdownContent";
+import { useKeyboardNav } from "../hooks/useKeyboardNav";
+import { chapters, loadChapterContent, siteTitle, stripLeadingHeading } from "../lib/chapters";
 
 function formatChapterNumber(id: string) {
   return String(Number(id));
@@ -13,9 +13,10 @@ export function ChapterPage() {
   const chapterIndex = chapters.findIndex((chapter) => chapter.id === id);
   const chapter = chapterIndex >= 0 ? chapters[chapterIndex] : null;
   const previousChapter = chapterIndex > 0 ? chapters[chapterIndex - 1] : null;
-  const nextChapter = chapterIndex >= 0 && chapterIndex < chapters.length - 1 ? chapters[chapterIndex + 1] : null;
+  const nextChapter =
+    chapterIndex >= 0 && chapterIndex < chapters.length - 1 ? chapters[chapterIndex + 1] : null;
   const previousPath = chapterIndex === 0 ? "/" : previousChapter ? `/${previousChapter.id}` : null;
-  const previousIndicator = chapterIndex === 0 ? "0" : previousChapter?.id ?? null;
+  const previousIndicator = chapterIndex === 0 ? "0" : (previousChapter?.id ?? null);
   const { indicator } = useKeyboardNav({
     nextPath: nextChapter ? `/${nextChapter.id}` : null,
     previousPath,
@@ -23,7 +24,7 @@ export function ChapterPage() {
     previousIndicator,
   });
 
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(Boolean(chapter));
   const [error, setError] = useState<string | null>(null);
 
@@ -34,8 +35,8 @@ export function ChapterPage() {
     }
 
     document.title = `${chapter.title} | ${siteTitle}`;
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    setContent('');
+    window.scrollTo({ top: 0, behavior: "auto" });
+    setContent("");
     setIsLoading(true);
     setError(null);
 
@@ -55,7 +56,7 @@ export function ChapterPage() {
           return;
         }
 
-        setError('この章を開けませんでした');
+        setError("この章を開けませんでした");
         setIsLoading(false);
       });
 
@@ -97,7 +98,7 @@ export function ChapterPage() {
       {error ? <p className="status-message">{error}</p> : null}
       {!isLoading && !error ? (
         <article className="prose" key={chapter.id}>
-          <ReactMarkdown>{content}</ReactMarkdown>
+          <MarkdownContent>{content}</MarkdownContent>
         </article>
       ) : null}
 
@@ -125,8 +126,12 @@ export function ChapterPage() {
           <nav aria-label="章送り" className="chapter-nav">
             {previousPath ? (
               <Link className="chapter-nav-link" to={previousPath}>
-                <span className="chapter-nav-meta">{chapterIndex === 0 ? "← 第0章" : "← 前の章"}</span>
-                <span className="chapter-nav-title">{chapterIndex === 0 ? siteTitle : previousChapter?.title}</span>
+                <span className="chapter-nav-meta">
+                  {chapterIndex === 0 ? "← 第0章" : "← 前の章"}
+                </span>
+                <span className="chapter-nav-title">
+                  {chapterIndex === 0 ? siteTitle : previousChapter?.title}
+                </span>
               </Link>
             ) : null}
             {nextChapter ? (
