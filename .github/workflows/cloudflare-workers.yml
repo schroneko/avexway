@@ -80,23 +80,30 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ steps.cloudflare-credentials.outputs.api_token }}
           CLOUDFLARE_ACCOUNT_ID: ${{ steps.cloudflare-credentials.outputs.account_id }}
         run: |
-          account_json="$(npx wrangler@4.70.0 whoami --json)"
-          resolved_account_id="$(
-            printf '%s' "$account_json" | jq -r --arg preferred "$CLOUDFLARE_ACCOUNT_ID" '
-              (.accounts // []) as $accounts
-              | if ($preferred | length) > 0 and any($accounts[]?; .id == $preferred) then
-                  $preferred
-                elif ($accounts | length) == 1 then
-                  $accounts[0].id
-                else
-                  empty
-                end
-            '
-          )"
+          resolved_account_id=""
 
-          if [ -z "$resolved_account_id" ] || [ "$resolved_account_id" = "null" ]; then
-            echo "Unable to resolve a unique Cloudflare account ID from the provided token." >&2
-            printf '%s' "$account_json" | jq '{accounts: [.accounts[]? | .name]}' >&2
+          if [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            response_code="$(
+              curl -sS -o /tmp/cloudflare-account-check.json -w '%{http_code}' \
+                -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/subdomain"
+            )"
+
+            if [ "$response_code" = "200" ]; then
+              resolved_account_id="$CLOUDFLARE_ACCOUNT_ID"
+            fi
+          fi
+
+          if [ -z "$resolved_account_id" ]; then
+            zone_json="$(
+              curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                "https://api.cloudflare.com/client/v4/zones?name=yutahayashi.com"
+            )"
+            resolved_account_id="$(printf '%s' "$zone_json" | jq -r '.result[0].account.id // empty')"
+          fi
+
+          if [ -z "$resolved_account_id" ]; then
+            echo "Unable to resolve the Cloudflare account ID from the configured secrets." >&2
             exit 1
           fi
 
