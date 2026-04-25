@@ -41,7 +41,7 @@ export function HomePage() {
           return;
         }
 
-        setError("この章を開けませんでした");
+        setError("序文を読み込めませんでした");
       });
 
     return () => {
