@@ -60,9 +60,8 @@ function MarkdownLink({ href, ...props }: ComponentProps<"a">) {
 }
 
 export function MarkdownContent({ children, className }: MarkdownContentProps) {
-  return (
+  const markdown = (
     <ReactMarkdown
-      className={className}
       components={{ a: MarkdownLink }}
       skipHtml
       urlTransform={(url) => getSafeUrl(url) ?? ""}
@@ -70,4 +69,6 @@ export function MarkdownContent({ children, className }: MarkdownContentProps) {
       {children}
     </ReactMarkdown>
   );
+
+  return className ? <div className={className}>{markdown}</div> : markdown;
 }
