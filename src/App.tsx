@@ -15,9 +15,13 @@ function AppFrame() {
   }, [location.pathname]);
 
   useEffect(() => {
+    if (!isSidebarOpen) {
+      return;
+    }
+
     const previousOverflow = document.body.style.overflow;
 
-    document.body.style.overflow = isSidebarOpen ? "hidden" : previousOverflow;
+    document.body.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = previousOverflow;
