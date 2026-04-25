@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type KeyboardNavOptions = {
   nextPath?: string | null;
@@ -8,7 +8,7 @@ type KeyboardNavOptions = {
   previousIndicator?: string | null;
 };
 
-const indicatorStorageKey = 'keyboard-nav-indicator';
+const indicatorStorageKey = "keyboard-nav-indicator";
 
 function isTypingTarget(element: Element | null) {
   if (!(element instanceof HTMLElement)) {
@@ -17,7 +17,12 @@ function isTypingTarget(element: Element | null) {
 
   const tagName = element.tagName.toLowerCase();
 
-  return element.isContentEditable || tagName === 'input' || tagName === 'textarea' || tagName === 'select';
+  return (
+    element.isContentEditable ||
+    tagName === "input" ||
+    tagName === "textarea" ||
+    tagName === "select"
+  );
 }
 
 export function useKeyboardNav({
@@ -51,7 +56,13 @@ export function useKeyboardNav({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+      if (
+        event.defaultPrevented ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey
+      ) {
         return;
       }
 
@@ -61,7 +72,7 @@ export function useKeyboardNav({
 
       const key = event.key.toLowerCase();
 
-      if ((event.key === 'ArrowRight' || key === 'l') && nextPath) {
+      if ((event.key === "ArrowRight" || key === "l") && nextPath) {
         event.preventDefault();
         if (nextIndicator) {
           window.sessionStorage.setItem(indicatorStorageKey, nextIndicator);
@@ -69,7 +80,7 @@ export function useKeyboardNav({
         navigate(nextPath);
       }
 
-      if ((event.key === 'ArrowLeft' || key === 'h') && previousPath) {
+      if ((event.key === "ArrowLeft" || key === "h") && previousPath) {
         event.preventDefault();
         if (previousIndicator) {
           window.sessionStorage.setItem(indicatorStorageKey, previousIndicator);
@@ -78,10 +89,10 @@ export function useKeyboardNav({
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [navigate, nextIndicator, nextPath, previousIndicator, previousPath]);
 

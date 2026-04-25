@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { chapters, siteTitle } from '../lib/chapters';
-import { ThemeToggle } from './ThemeToggle';
+import { useEffect, useRef } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { chapters, siteTitle } from "../lib/chapters";
+import { ThemeToggle } from "./ThemeToggle";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -15,23 +15,28 @@ function formatChapterNumber(id: string) {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const location = useLocation();
   const listRef = useRef<HTMLOListElement>(null);
-  const activeChapterId = location.pathname === "/" ? "0000" : chapters.find((chapter) => location.pathname === `/${chapter.id}`)?.id ?? null;
+  const activeChapterId =
+    location.pathname === "/"
+      ? "0000"
+      : (chapters.find((chapter) => location.pathname === `/${chapter.id}`)?.id ?? null);
 
   useEffect(() => {
     if (!activeChapterId) {
       return;
     }
 
-    const activeLink = listRef.current?.querySelector<HTMLElement>(`[data-chapter-id="${activeChapterId}"]`);
+    const activeLink = listRef.current?.querySelector<HTMLElement>(
+      `[data-chapter-id="${activeChapterId}"]`,
+    );
 
     activeLink?.scrollIntoView({
-      block: 'center',
-      inline: 'nearest',
+      block: "center",
+      inline: "nearest",
     });
   }, [activeChapterId, isOpen]);
 
   return (
-    <aside className={`sidebar${isOpen ? ' is-open' : ''}`} aria-label="章ナビゲーション">
+    <aside className={`sidebar${isOpen ? " is-open" : ""}`} aria-label="章ナビゲーション">
       <div className="sidebar-header">
         <Link aria-label={siteTitle} className="sidebar-brand" onClick={onClose} to="/">
           avex way
@@ -41,7 +46,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <ol className="sidebar-chapter-list" ref={listRef}>
           <li>
             <NavLink
-              className={({ isActive }) => `sidebar-link${isActive ? ' is-active' : ''}`}
+              className={({ isActive }) => `sidebar-link${isActive ? " is-active" : ""}`}
               data-chapter-id="0000"
               end
               onClick={onClose}
@@ -54,7 +59,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           {chapters.map((chapter) => (
             <li key={chapter.id}>
               <NavLink
-                className={({ isActive }) => `sidebar-link${isActive ? ' is-active' : ''}`}
+                className={({ isActive }) => `sidebar-link${isActive ? " is-active" : ""}`}
                 data-chapter-id={chapter.id}
                 onClick={onClose}
                 to={`/${chapter.id}`}

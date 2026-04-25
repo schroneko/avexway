@@ -1,12 +1,12 @@
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from "../hooks/useTheme";
 
 type ThemeToggleProps = {
   className?: string;
 };
 
-export function ThemeToggle({ className = '' }: ThemeToggleProps) {
+export function ThemeToggle({ className = "" }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
-  const label = theme === 'dark' ? 'ライトモードに切り替え' : 'ダークモードに切り替え';
+  const label = theme === "dark" ? "ライトモードに切り替え" : "ダークモードに切り替え";
 
   return (
     <button
@@ -24,7 +24,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
         strokeWidth="1.5"
         viewBox="0 0 18 18"
       >
-        {theme === 'dark' ? (
+        {theme === "dark" ? (
           <>
             <circle cx="9" cy="9" r="4" />
             <line x1="9" x2="9" y1="1.5" y2="3.5" />

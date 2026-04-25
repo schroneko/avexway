@@ -103,7 +103,9 @@ function scoreOccurrence(position: number, title: string): number {
   const firstSentence =
     condensedPrefix.match(/^[^。!?」\n]{0,24}[。!?」]?/u)?.[0].trim() ?? condensedPrefix;
   const before = raw.slice(Math.max(0, position - 8), position);
-  const afterTitle = rawSlice.slice(bodyStart, Math.min(bodyStart + 64, rawSlice.length)).trimStart();
+  const afterTitle = rawSlice
+    .slice(bodyStart, Math.min(bodyStart + 64, rawSlice.length))
+    .trimStart();
 
   let score = 0;
 
@@ -193,14 +195,20 @@ const chapterSpecificCleanups: Record<string, Array<[RegExp, string]>> = {
       "しかし、エイベックスの株式公開が具体化するにつれて、松浦の視界に管理強化の暗雲がたれ込めていった。その当時を、いま松浦があらためて振り返る。「ELTがデビューした年は、『絶対にELTを売ってみせる』って言っていた。",
     ],
     [/きて。その抑圧が/g, "それはイコール『株式公開だから』っていうことになってきて。その抑圧が"],
-    [/我慢しようと思ったたから。/g, "我慢しようと思ったんです。株式の店頭公開、その先の上場には興味がありましたから。"],
+    [
+      /我慢しようと思ったたから。/g,
+      "我慢しようと思ったんです。株式の店頭公開、その先の上場には興味がありましたから。",
+    ],
   ],
   "0084": [
     [
       /衝撃的でしたね」\s*ていた。「あゆはあーっ」/g,
       "衝撃的でしたね」\n\n1998年4月に、ファーストシングル『poker face』で浜崎あゆみはデビューした。\n\n初め、女の子から反発が起きていた。「あゆはあーっ」",
     ],
-    [/嫌われるのは嫉妬があるからで、認められ\s*ちゃう/g, "嫌われるのは嫉妬があるからで、認められちゃう"],
+    [
+      /嫌われるのは嫉妬があるからで、認められ\s*ちゃう/g,
+      "嫌われるのは嫉妬があるからで、認められちゃう",
+    ],
     [
       /12月には『Depend on you』と、松浦はたたみかけるように\s*20位、20位、8位、/g,
       "12月には『Depend on you』と、松浦はたたみかけるように浜崎あゆみのシングルをリリースした。\n\nオリコンの順位は、20位、20位、8位、",
@@ -318,7 +326,10 @@ function stripLeadingArtifacts(text: string): string {
 
 function stripStructuralArtifacts(text: string): string {
   return text
-    .replace(/(?:^|\n)\s*(?:CONTENTS(?:\s+chanter\s*\d+\s*will be your story)?|avex way(?:\s*\d{4}-\d{4})?)\s*(?=\n|$)/gi, "\n")
+    .replace(
+      /(?:^|\n)\s*(?:CONTENTS(?:\s+chanter\s*\d+\s*will be your story)?|avex way(?:\s*\d{4}-\d{4})?)\s*(?=\n|$)/gi,
+      "\n",
+    )
     .replace(/(?:^|\n)\s*Chapter-\d+[^\n]*(?=\n|$)/g, "\n")
     .replace(/(?:^|\n)\s*\d{4}\/\d{2}[^\n]*(?=\n|$)/g, "\n")
     .replace(/(?:^|\n)\s*\d{1,3}\s*(?=\n|$)/g, "\n");
@@ -337,7 +348,10 @@ function stripInlineArtifacts(text: string): string {
       "",
     )
     .replace(/『[^』」]{1,100}[』」]\s*[^。\n]{0,120}?(?:シングル|アルバム|DVD|デビュー|受賞)/g, "")
-    .replace(/＜[^＞]{1,100}＞\s*[^。\n]{0,120}?(?:設立|移転|完成|増資|開催|開始|公開|オープン)/g, "");
+    .replace(
+      /＜[^＞]{1,100}＞\s*[^。\n]{0,120}?(?:設立|移転|完成|増資|開催|開始|公開|オープン)/g,
+      "",
+    );
 }
 
 function isArtifactLine(line: string): boolean {
@@ -427,7 +441,10 @@ function applyChapterSpecificCleanups(id: string, text: string): string {
     return text;
   }
 
-  return rules.reduce((current, [pattern, replacement]) => current.replace(pattern, replacement), text);
+  return rules.reduce(
+    (current, [pattern, replacement]) => current.replace(pattern, replacement),
+    text,
+  );
 }
 
 function splitIntoParagraphs(block: string): string[] {
