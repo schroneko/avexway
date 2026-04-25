@@ -1,16 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { chapters, siteTitle } from "../lib/chapters";
+import { chapters, formatChapterNumber, siteTitle } from "../lib/chapters";
 import { ThemeToggle } from "./ThemeToggle";
 
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
 };
-
-function formatChapterNumber(id: string) {
-  return String(Number(id));
-}
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const location = useLocation();

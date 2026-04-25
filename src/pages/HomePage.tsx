@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MarkdownContent } from "../components/MarkdownContent";
 import { useKeyboardNav } from "../hooks/useKeyboardNav";
-import { chapters, loadIntroContent, siteTitle, stripLeadingHeading } from "../lib/chapters";
-
-function formatChapterNumber(id: string) {
-  return String(Number(id));
-}
+import {
+  chapters,
+  formatChapterNumber,
+  loadIntroContent,
+  siteTitle,
+  stripLeadingHeading,
+} from "../lib/chapters";
 
 export function HomePage() {
   const [intro, setIntro] = useState("");

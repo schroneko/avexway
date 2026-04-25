@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MarkdownContent } from "../components/MarkdownContent";
 import { useKeyboardNav } from "../hooks/useKeyboardNav";
-import { chapters, loadChapterContent, siteTitle, stripLeadingHeading } from "../lib/chapters";
-
-function formatChapterNumber(id: string) {
-  return String(Number(id));
-}
+import {
+  chapters,
+  formatChapterNumber,
+  loadChapterContent,
+  siteTitle,
+  stripLeadingHeading,
+} from "../lib/chapters";
 
 export function ChapterPage() {
   const { id } = useParams();

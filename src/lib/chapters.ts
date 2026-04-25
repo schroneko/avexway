@@ -30,6 +30,10 @@ export function stripLeadingHeading(markdown: string): string {
   return markdown.replace(/^#\s+.+\n+/, "").trim();
 }
 
+export function formatChapterNumber(id: string): string {
+  return String(Number(id));
+}
+
 export async function loadIntroContent(): Promise<string> {
   const loader = introContentModules["../../content/index.mdx"];
 
