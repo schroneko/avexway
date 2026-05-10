@@ -11,7 +11,9 @@
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "lint": "oxlint . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv",
-    "lint:fix": "oxlint --fix . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv"
+    "lint:fix": "oxlint --fix . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv",
+    "lint:text": "textlint \"**/*.md\"",
+    "lint:text:fix": "textlint --fix \"**/*.md\""
   },
   "dependencies": {
     "react": "19.2.4",
@@ -27,7 +29,9 @@
     "oxfmt": "^0.42.0",
     "oxlint": "^1.57.0",
     "typescript": "6.0.2",
-    "vite": "8.0.9"
+    "vite": "8.0.9",
+    "textlint": "^15.5.1",
+    "textlint-rule-preset-ja-spacing": "^2.4.3"
   },
   "engines": {
     "node": "^24.0.0"
