@@ -10,8 +10,8 @@
     "deploy": "npx wrangler@4.106.0 deploy",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "lint": "oxlint . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv",
-    "lint:fix": "oxlint --fix . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
     "lint:text": "textlint \"**/*.md\"",
     "lint:text:fix": "textlint --fix \"**/*.md\""
   },
