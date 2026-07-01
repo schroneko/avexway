@@ -1,4 +1,4 @@
-import { createContext, createElement, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 export type Theme = "dark" | "light";
@@ -33,16 +33,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem("theme", theme);
   }, [theme]);
 
-  return createElement(
-    ThemeContext.Provider,
-    {
-      value: {
+  return (
+    <ThemeContext.Provider
+      value={{
         setTheme,
         theme,
         toggleTheme: () => setTheme((currentTheme) => (currentTheme === "dark" ? "light" : "dark")),
-      },
-    },
-    children,
+      }}
+    >
+      {children}
+    </ThemeContext.Provider>
   );
 }
 
