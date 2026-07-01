@@ -16,12 +16,7 @@ export const chapters: Chapter[] = Object.entries(chapterMeta)
   .sort(([leftId], [rightId]) => leftId.localeCompare(rightId))
   .map(([id, title]) => ({ id, title }));
 
-const chapterContentModules = import.meta.glob<string>("../../content/[0-9][0-9][0-9][0-9].mdx", {
-  import: "default",
-  query: "?raw",
-});
-
-const introContentModules = import.meta.glob<string>("../../content/index.mdx", {
+const contentModules = import.meta.glob<string>("../../content/*.mdx", {
   import: "default",
   query: "?raw",
 });
@@ -34,21 +29,11 @@ export function formatChapterNumber(id: string): string {
   return String(Number(id));
 }
 
-export async function loadIntroContent(): Promise<string> {
-  const loader = introContentModules["../../content/index.mdx"];
+export async function loadContent(name: string): Promise<string> {
+  const loader = contentModules[`../../content/${name}.mdx`];
 
   if (!loader) {
-    throw new Error("Missing intro content");
-  }
-
-  return loader();
-}
-
-export async function loadChapterContent(id: string): Promise<string> {
-  const loader = chapterContentModules[`../../content/${id}.mdx`];
-
-  if (!loader) {
-    throw new Error(`Missing chapter content: ${id}`);
+    throw new Error(`Missing content: ${name}`);
   }
 
   return loader();

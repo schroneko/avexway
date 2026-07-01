@@ -1,18 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { KeyboardIndicator } from "../components/KeyboardIndicator";
 import { MarkdownContent } from "../components/MarkdownContent";
 import { useKeyboardNav } from "../hooks/useKeyboardNav";
-import {
-  chapters,
-  formatChapterNumber,
-  loadIntroContent,
-  siteTitle,
-  stripLeadingHeading,
-} from "../lib/chapters";
+import { useMarkdownContent } from "../hooks/useMarkdownContent";
+import { chapters, formatChapterNumber, siteTitle } from "../lib/chapters";
 
 export function HomePage() {
-  const [intro, setIntro] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const { content, error } = useMarkdownContent("index", "序文を読み込めませんでした");
   const { indicator } = useKeyboardNav({
     nextPath: chapters[0] ? `/${chapters[0].id}` : null,
     previousPath: null,
@@ -20,33 +15,14 @@ export function HomePage() {
     previousIndicator: null,
   });
 
+  const intro = useMemo(() => {
+    const separatorIndex = content.indexOf("\n---");
+
+    return separatorIndex >= 0 ? content.slice(0, separatorIndex).trim() : content;
+  }, [content]);
+
   useEffect(() => {
     document.title = siteTitle;
-
-    let active = true;
-
-    void loadIntroContent()
-      .then((markdown) => {
-        if (!active) {
-          return;
-        }
-
-        const stripped = stripLeadingHeading(markdown);
-        const separatorIndex = stripped.indexOf("\n---");
-        setIntro(separatorIndex >= 0 ? stripped.slice(0, separatorIndex).trim() : stripped);
-        setError(null);
-      })
-      .catch(() => {
-        if (!active) {
-          return;
-        }
-
-        setError("序文を読み込めませんでした");
-      });
-
-    return () => {
-      active = false;
-    };
   }, []);
 
   return (
@@ -91,11 +67,7 @@ export function HomePage() {
         </Link>
       ) : null}
 
-      {indicator ? (
-        <div aria-live="polite" className="keyboard-indicator" role="status">
-          第{formatChapterNumber(indicator)}章
-        </div>
-      ) : null}
+      <KeyboardIndicator indicator={indicator} />
     </main>
   );
 }

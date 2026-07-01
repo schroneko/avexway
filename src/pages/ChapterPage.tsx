@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { KeyboardIndicator } from "../components/KeyboardIndicator";
 import { MarkdownContent } from "../components/MarkdownContent";
 import { useKeyboardNav } from "../hooks/useKeyboardNav";
-import {
-  chapters,
-  formatChapterNumber,
-  loadChapterContent,
-  siteTitle,
-  stripLeadingHeading,
-} from "../lib/chapters";
+import { useMarkdownContent } from "../hooks/useMarkdownContent";
+import { chapters, formatChapterNumber, siteTitle } from "../lib/chapters";
 
 export function ChapterPage() {
   const { id } = useParams();
@@ -25,10 +21,10 @@ export function ChapterPage() {
     nextIndicator: nextChapter?.id ?? null,
     previousIndicator,
   });
-
-  const [content, setContent] = useState("");
-  const [isLoading, setIsLoading] = useState(Boolean(chapter));
-  const [error, setError] = useState<string | null>(null);
+  const { content, error, isLoading } = useMarkdownContent(
+    chapter?.id ?? null,
+    "この章を開けませんでした",
+  );
 
   useEffect(() => {
     if (!chapter) {
@@ -38,33 +34,6 @@ export function ChapterPage() {
 
     document.title = `${chapter.title} | ${siteTitle}`;
     window.scrollTo({ top: 0, behavior: "auto" });
-    setContent("");
-    setIsLoading(true);
-    setError(null);
-
-    let active = true;
-
-    void loadChapterContent(chapter.id)
-      .then((markdown) => {
-        if (!active) {
-          return;
-        }
-
-        setContent(stripLeadingHeading(markdown));
-        setIsLoading(false);
-      })
-      .catch(() => {
-        if (!active) {
-          return;
-        }
-
-        setError("この章を開けませんでした");
-        setIsLoading(false);
-      });
-
-    return () => {
-      active = false;
-    };
   }, [chapter]);
 
   if (!chapter) {
@@ -144,11 +113,7 @@ export function ChapterPage() {
         </nav>
       ) : null}
 
-      {indicator ? (
-        <div aria-live="polite" className="keyboard-indicator" role="status">
-          第{formatChapterNumber(indicator)}章
-        </div>
-      ) : null}
+      <KeyboardIndicator indicator={indicator} />
     </main>
   );
 }
