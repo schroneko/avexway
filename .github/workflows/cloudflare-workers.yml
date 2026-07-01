@@ -114,11 +114,11 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ steps.cloudflare-credentials.outputs.account_id }}
           CLOUDFLARE_API_KEY: ${{ steps.cloudflare-credentials.outputs.api_key }}
           CLOUDFLARE_EMAIL: ${{ steps.cloudflare-credentials.outputs.email }}
-        run: npx wrangler@4.70.0 deploy
+        run: npx wrangler@4.106.0 deploy
 
       - name: Deploy to Cloudflare Workers with API token fallback
         if: steps.cloudflare-credentials.outputs.api_key == '' || steps.cloudflare-credentials.outputs.email == ''
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ steps.cloudflare-credentials.outputs.account_id }}
           CLOUDFLARE_API_TOKEN: ${{ steps.cloudflare-credentials.outputs.api_token }}
-        run: npx wrangler@4.70.0 deploy
+        run: npx wrangler@4.106.0 deploy

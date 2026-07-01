@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npx wrangler@4.70.0 deploy",
+    "deploy": "npx wrangler@4.106.0 deploy",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "lint": "oxlint . --ignore-pattern node_modules --ignore-pattern dist --ignore-pattern build --ignore-pattern .next --ignore-pattern coverage --ignore-pattern .turbo --ignore-pattern .wrangler --ignore-pattern .build --ignore-pattern .venv",
@@ -16,22 +16,22 @@
     "lint:text:fix": "textlint --fix \"**/*.md\""
   },
   "dependencies": {
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "react-markdown": "10.1.0",
     "react-router-dom": "7.18.1"
   },
   "devDependencies": {
-    "@types/node": "25.5.0",
-    "@types/react": "19.2.14",
+    "@types/node": "26.1.0",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.1",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
-    "textlint": "^15.5.1",
-    "textlint-rule-preset-ja-spacing": "^2.4.3",
-    "typescript": "6.0.2",
-    "vite": "8.0.16"
+    "@vitejs/plugin-react": "6.0.3",
+    "oxfmt": "^0.57.0",
+    "oxlint": "^1.72.0",
+    "textlint": "^15.7.1",
+    "textlint-rule-preset-ja-spacing": "^3.0.2",
+    "typescript": "6.0.3",
+    "vite": "8.1.2"
   },
   "engines": {
     "node": "^24.0.0"
