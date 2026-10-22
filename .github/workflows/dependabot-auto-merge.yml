@@ -8,7 +8,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   schedule:
-    - cron: "23 */6 * * *"
+    - cron: 23 */6 * * *
   workflow_dispatch:
 
 permissions: {}
@@ -128,7 +128,7 @@ jobs:
           PY_DIRS: ${{ steps.detect.outputs.py_dirs }}
           GO_DIRS: ${{ steps.detect.outputs.go_dirs }}
           CARGO_DIRS: ${{ steps.detect.outputs.cargo_dirs }}
-          CI: "true"
+          CI: true
         run: |
           set -euo pipefail
           root=$PWD
@@ -331,8 +331,18 @@ jobs:
                || [ "$(jq -r .sha <<<"$pinfo")" != "$sha" ] || [ "$(jq -r .mergeable <<<"$pinfo")" != true ]; then
               echo "PR #$pr: not mergeable now (closed/draft/head moved/conflict); skipping"; return 0
             fi
-            gh pr merge "$pr" --repo "$REPO" --squash --delete-branch --match-head-commit "$sha"
-            echo "PR #$pr merged ($deps, $UPDATE_TYPE)"
+            # another merge can move the base between the mergeable check and the merge call;
+            # retry only that race. --match-head-commit still pins the validated head commit.
+            local out attempt
+            for attempt in 1 2 3 4; do
+              if out=$(gh pr merge "$pr" --repo "$REPO" --squash --delete-branch --match-head-commit "$sha" 2>&1); then
+                echo "$out"; echo "PR #$pr merged ($deps, ${UPDATE_TYPE:-unknown})"; return 0
+              fi
+              echo "$out"
+              grep -q 'Base branch was modified' <<<"$out" || return 1
+              echo "PR #$pr: base moved (attempt $attempt); retrying in 20s"; sleep 20
+            done
+            return 1
           }
 
           if [ "$MODE" = pr ]; then
@@ -367,4 +377,3 @@ jobs:
             done < <(gh api --paginate "repos/$REPO/pulls?state=open&base=$default_branch&per_page=100" \
               --jq '.[] | select(.user.login == "dependabot[bot]" and (.draft | not)) | [.number, .head.sha, .head.ref] | @tsv')
           exit "$fails"
-
