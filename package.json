@@ -31,7 +31,7 @@
     "textlint": "^15.7.1",
     "textlint-rule-preset-ja-spacing": "^3.0.2",
     "typescript": "6.0.3",
-    "vite": "8.1.2"
+    "vite": "8.3.5"
   },
   "overrides": {
     "brace-expansion@5": "5.0.12",
