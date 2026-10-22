@@ -46,6 +46,8 @@ jobs:
       - name: Detect ecosystems
         id: detect
         shell: bash
+        env:
+          HEAD_REF: ${{ github.head_ref }}
         run: |
           set -euo pipefail
           find_dirs() { # $1..: file names; prints unique dirs (max 6), root first
@@ -59,7 +61,13 @@ jobs:
           py_dirs=$(find_dirs uv.lock poetry.lock requirements.txt pyproject.toml)
           go_dirs=$(find_dirs go.mod)
           cargo_dirs=$(find_dirs Cargo.lock)
-          if [ -z "$node_dirs" ] && [ -f package.json ]; then node_dirs=.; fi
+          if [ -z "$node_dirs" ] && [ -f package.json ]; then
+            # no lockfile: an npm update cannot be validated from a lockfile, other ecosystems still can
+            case "$HEAD_REF" in
+              dependabot/npm_and_yarn/*) node_dirs=. ;;
+              *) echo "::warning::package.json without a lockfile; skipping Node validation for a non-npm update" ;;
+            esac
+          fi
           {
             echo "node_dirs=$node_dirs"
             echo "py_dirs=$py_dirs"
